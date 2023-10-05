@@ -1,38 +1,23 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get,Patch,Param } from '@nestjs/common';
+import { ListOfCompanies, SingleCompany } from './types/admin-panel.types';
 
-interface SingleCompany {
-    companyId: string;
-    companyName: string;
-    numberOfChangingSport: number;
-    workingHoursPerDay: number;
-    reservationTimeInMinutes: number;
-}
-
-type ListOfCompanies = SingleCompany[];
+import { companies } from './dummyDataCompanies';
 
 @Controller('/admin-panel')
 export class AdminPanelController {
-
-    companies:ListOfCompanies = [
-        {
-            companyId: '1',
-            companyName: 'Change Your Wheels Pro',
-            numberOfChangingSport: 2,
-            workingHoursPerDay: 10,
-            reservationTimeInMinutes: 30,
-        },
-        {
-            companyId: '2',
-            companyName: 'Fast wheel change and fix',
-            numberOfChangingSport: 1,
-            workingHoursPerDay: 6,
-            reservationTimeInMinutes: 15,
-        }
-    ]
-
+  
     @Get('/')
     getListCompanies(    
     ):ListOfCompanies{
-        return this.companies
+        return companies
+    }
+
+    @Patch('/:id')
+    updateComapnyDetails(
+        @Param('id') companyId:string
+    ):SingleCompany|any {
+        const findCompany = companies.find(obj => obj.companyId === companyId)
+        console.log(findCompany)
+        return findCompany
     }
 }
